@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+
+    defaultConfig {
+        applicationId "com.test.exportword"
+        minSdkVersion 23
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/NOTICE'
+    }
+
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
+    }
+
+}
+
+dependencies {
+    //    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    // https://mvnrepository.com/artifact/org.freemarker/freemarker
+    //        compile group: 'org.freemarker', name: 'freemarker', version: '2.3.25-incubating'
+    //        compile group: 'org.apache.servicemix.bundles', name: 'org.apache.servicemix.bundles.freemarker', version: '2.3.17_1'
+    //    compile files('libs/org.apache.servicemix.bundles.freemarker-2.3.17_1.jar')
+    //    compile files('libs/freemarker.jar')
+    compile files('libs/docx4j-3.3.1.jar')
+    compile files('libs/slf4j-api-1.7.21.jar')
+    compile files('libs/commons-io-2.4.jar')
+}
