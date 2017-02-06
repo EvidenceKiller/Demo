@@ -1,5 +1,6 @@
 package com.zxn.aidldemo;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -25,8 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MESSAGE_NEW_BOOK_ARRIVED = 1;
 
+    private static final int FLAG_DEATH_RECIPIENT = 0;
+
     private IBookManager mRemoteBookManager;
 
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
 
         @Override
@@ -42,12 +46,24 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private IBinder.DeathRecipient mDeathRecipient = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            Log.e(TAG, "Binder died, thread name : " + Thread.currentThread().getName());
+            if (null != mRemoteBookManager) {
+                mRemoteBookManager.asBinder().unlinkToDeath(mDeathRecipient, FLAG_DEATH_RECIPIENT);
+                mRemoteBookManager = null;
+            }
+        }
+    };
+
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             IBookManager bookManager = IBookManager.Stub.asInterface(iBinder);
+            mRemoteBookManager = bookManager;
             try {
-                mRemoteBookManager = bookManager;
+                mRemoteBookManager.asBinder().linkToDeath(mDeathRecipient, FLAG_DEATH_RECIPIENT);
                 List<Book> list = bookManager.getBookList();
                 Log.i(TAG, "query book list, list type : " + list.getClass());
                 Log.i(TAG, "query book list : " + list.toString());
