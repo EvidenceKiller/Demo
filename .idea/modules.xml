@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Demo.iml" filepath="$PROJECT_DIR$/Demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/Test.iml" filepath="$PROJECT_DIR$/Test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aidldemo/aidldemo.iml" filepath="$PROJECT_DIR$/aidldemo/aidldemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exportword/exportword.iml" filepath="$PROJECT_DIR$/exportword/exportword.iml" />
+      <module fileurl="file://$PROJECT_DIR$/loader/loader.iml" filepath="$PROJECT_DIR$/loader/loader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/loaderdemo/loaderdemo.iml" filepath="$PROJECT_DIR$/loaderdemo/loaderdemo.iml" />
     </modules>
   </component>
 </project>
