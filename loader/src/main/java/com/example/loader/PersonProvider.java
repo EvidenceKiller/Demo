@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,11 +18,26 @@ public class PersonProvider extends ContentProvider {
     private static final String TAG = "PersonProvider";
 
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-    private DBHelper
+
+    private DBHelper mDBHelper;
+
+    private SQLiteDatabase getDatabase() {
+        if (null == mDBHelper) {
+            mDBHelper = new DBHelper(this.getContext());
+        }
+        return mDBHelper.getWritableDatabase();
+    }
 
     @Override
     public boolean onCreate() {
+        init();
         return false;
+    }
+
+    private void init() {
+        synchronized (sUriMatcher) {
+            sUriMatcher.addURI(PersonDataBaseUtils.AUTOR, PersonDataBaseUtils.TablePerson.TABLE_NAME, 1);
+        }
     }
 
     @Nullable

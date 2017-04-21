@@ -3,7 +3,9 @@ package com.example.loader;
 import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by zxn on 17-4-19.
@@ -18,21 +20,32 @@ public class DBHelper extends SQLiteOpenHelper {
             + PersonDataBaseUtils.TablePerson.PERSON_COLUMN_NAME + " VARCHAR NOT NULL, "
             + PersonDataBaseUtils.TablePerson.PERSON_COLUMN_AGE + " INTEGER)";
 
-    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
-    }
+    private static final String DATABASE_NAME = "person";
 
-    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
+    private static final int VERSION = 1;
+
+    public DBHelper(Context context) {
+        super(context, DATABASE_NAME, null, VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL(CREATE_PERSON);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        Log.i(TAG, "DBHelper onUpgrade() oldVersion = " + oldVersion + " newVersion = " + newVersion);
+        if (oldVersion != newVersion) {
+            db.beginTransaction();
+            try {
+                // TODO
+            } catch (SQLiteException sqle) {
+                sqle.printStackTrace();
+            } finally {
+                db.setTransactionSuccessful();
+                db.endTransaction();
+            }
+        }
     }
 }
