@@ -32,6 +32,11 @@ public class PersonDataBaseUtils {
 
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/com.example.provider." + TABLE_NAME;
 
+        public static final int MATCH_NUM_NAME_LIST = 1;
+        public static final int MATCH_NUM_NAME_ITEM = 2;
+        public static final int MATCH_NUM_AGE_LIST = 3;
+        public static final int MATCH_NUM_AGE_ITEM = 4;
+
         public static final String PERSON_COLUMN_ID = "_id";
 
         public static final String PERSON_COLUMN_NAME = "name";
