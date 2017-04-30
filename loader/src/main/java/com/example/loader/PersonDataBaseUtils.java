@@ -28,14 +28,12 @@ public class PersonDataBaseUtils {
 
         public static final Uri CONTENT_URI = Uri.parse(BASE_URI + TABLE_NAME);
 
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.example.provider." + TABLE_NAME;
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.example.loader." + TABLE_NAME;
 
-        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/com.example.provider." + TABLE_NAME;
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/com.example.loader." + TABLE_NAME;
 
         public static final int MATCH_NUM_NAME_LIST = 1;
         public static final int MATCH_NUM_NAME_ITEM = 2;
-        public static final int MATCH_NUM_AGE_LIST = 3;
-        public static final int MATCH_NUM_AGE_ITEM = 4;
 
         public static final String PERSON_COLUMN_ID = "_id";
 
