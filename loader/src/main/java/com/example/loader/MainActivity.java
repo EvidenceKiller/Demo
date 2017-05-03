@@ -1,5 +1,6 @@
 package com.example.loader;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.tv_add:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 break;
             case R.id.tv_remove:
                 
