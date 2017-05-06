@@ -1,15 +1,13 @@
 package com.example.loader;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private CursorLoaderListFragment mFragment;
 
     private TextView mAdd;
     private TextView mRemove;
@@ -18,6 +16,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mFragment = (CursorLoaderListFragment) getFragmentManager().findFragmentById(R.id.fragment_list);
 
         mAdd = (TextView) findViewById(R.id.tv_add);
         mAdd.setOnClickListener(this);
@@ -29,10 +29,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.tv_add:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                mFragment.add(getContentResolver());
                 break;
             case R.id.tv_remove:
-                
+                mFragment.remove(getContentResolver());
+                break;
+            default:
+                break;
         }
     }
 }

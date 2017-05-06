@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 /**
  * Created by zxn on 17-4-19.
@@ -31,6 +32,7 @@ public class PersonProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+        Log.i(TAG, "onCreate");
         init();
         return false;
     }
@@ -47,6 +49,7 @@ public class PersonProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+        Log.i(TAG, "query");
         SQLiteDatabase db = getDatabase();
         Cursor cursor = null;
         try {
@@ -95,6 +98,7 @@ public class PersonProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+        Log.i(TAG, "insert");
         if (null == values || values.size() <= 0) {
             return null;
         }
@@ -118,6 +122,7 @@ public class PersonProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        Log.i(TAG, "delete");
         SQLiteDatabase db = getDatabase();
         int row = -1;
         try {
@@ -145,6 +150,7 @@ public class PersonProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+        Log.i(TAG, "update");
         if (null == values || values.size() <= 0) {
             return -1;
         }
