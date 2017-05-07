@@ -22,18 +22,22 @@
         <TextView
             android:id="@+id/tv_add"
             android:layout_width="0dp"
-            android:gravity="center"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="add"/>
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="add" />
 
         <TextView
             android:id="@+id/tv_remove"
             android:layout_width="0dp"
-            android:gravity="center"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="remove"/>
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="remove" />
 
     </LinearLayout>
 

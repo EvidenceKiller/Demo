@@ -11,14 +11,19 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
@@ -43,6 +48,8 @@ public class CursorLoaderListFragment extends ListFragment implements LoaderMana
 
     String mCurFilter;
 
+    private PersonObserver mObserver;
+
     private int mCount = 0;
 
     @Override
@@ -50,6 +57,10 @@ public class CursorLoaderListFragment extends ListFragment implements LoaderMana
         super.onActivityCreated(savedInstanceState);
         setEmptyText("no people");
         setHasOptionsMenu(true);
+        mObserver = new PersonObserver(new Handler());
+        getActivity().getContentResolver().registerContentObserver(PersonDataBaseUtils.TablePerson.CONTENT_URI,
+                true, mObserver);
+
 
         mAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_2, null,
                 new String[]{PersonDataBaseUtils.TablePerson.PERSON_COLUMN_NAME,
@@ -70,6 +81,17 @@ public class CursorLoaderListFragment extends ListFragment implements LoaderMana
         mSearchView.setOnCloseListener(this);
         mSearchView.setIconifiedByDefault(true);
         item.setActionView(mSearchView);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(TAG, "onOptionsItemSelected ------- item.getTitle : " + item.getTitle());
+        if ("Search".equals(item.getTitle())) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            mSearchView.setFocusable(true);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -142,6 +164,14 @@ public class CursorLoaderListFragment extends ListFragment implements LoaderMana
         return false;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mObserver != null) {
+            getActivity().getContentResolver().unregisterContentObserver(mObserver);
+        }
+    }
+
     public void add(ContentResolver resolver) {
         if (mCount >= 0) {
             String name = Integer.toString(mCount);
@@ -160,16 +190,20 @@ public class CursorLoaderListFragment extends ListFragment implements LoaderMana
     }
 
     public void remove(ContentResolver resolver) {
-        if (mCount >= 0) {
+        if (mCount > 0) {
             String name = Integer.toString(mCount - 1);
+            Log.i(TAG, "remove ------ name : " + name);
             if (checkDataIfExist(resolver, name)) {
                 resolver.delete(PersonDataBaseUtils.TablePerson.CONTENT_URI,
                         PersonDataBaseUtils.TablePerson.PERSON_COLUMN_NAME + "=?", new String[]{name});
+            } else {
+                Log.e(TAG, "remove ------ check data not exist");
             }
         }
     }
 
     private boolean checkDataIfExist(ContentResolver resolver, String... params) {
+        Log.i(TAG, "checkDataIfExist");
         int count = 0;
         Cursor cursor = null;
         try {
@@ -177,6 +211,7 @@ public class CursorLoaderListFragment extends ListFragment implements LoaderMana
                     new String[]{"COUNT(*)"}, PersonDataBaseUtils.TablePerson.PERSON_COLUMN_NAME + "=?",
                     params, null);
             if (cursor == null) {
+                Log.i(TAG, "checkDataIfExist ------ cursor is null");
                 return false;
             }
             if (cursor.moveToFirst()) {
@@ -189,6 +224,23 @@ public class CursorLoaderListFragment extends ListFragment implements LoaderMana
             }
         }
         return count != 0;
+    }
+
+    private class PersonObserver extends ContentObserver {
+
+        /**
+         * Creates a content observer.
+         *
+         * @param handler The handler to run {@link #onChange} on, or null if none.
+         */
+        public PersonObserver(Handler handler) {
+            super(handler);
+        }
+
+        public void onChange(boolean selfChange) {
+            Log.i(TAG, "PersonObserver : onChange");
+            getLoaderManager().restartLoader(0, null, CursorLoaderListFragment.this);
+        }
     }
 
     public static class MySearchView extends SearchView {

@@ -110,6 +110,7 @@ public class PersonProvider extends ContentProvider {
                 case PersonDataBaseUtils.TablePerson.MATCH_NUM_NAME_LIST:
                 case PersonDataBaseUtils.TablePerson.MATCH_NUM_NAME_ITEM:
                     row = db.insert(PersonDataBaseUtils.TablePerson.TABLE_NAME, null, values);
+                    getContext().getContentResolver().notifyChange(uri, null);
                     break;
                 default:
                     break;
@@ -142,6 +143,7 @@ public class PersonProvider extends ContentProvider {
                 default:
                     break;
             }
+            getContext().getContentResolver().notifyChange(uri, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
